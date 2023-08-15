@@ -1,4 +1,4 @@
-package RCSdb
+package rcsdb
 
 // import (
 // 	"encoding/json"
