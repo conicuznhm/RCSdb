@@ -1,7 +1,5 @@
 package RCSdb
 
-// package main
-
 import (
 	"encoding/json"
 	"errors"
@@ -14,15 +12,16 @@ import (
 
 // load and save id in txt
 // var defaultPath = "dataApi/utilstore/last_id.txt"
-var defaultPath = "dataApi"
+var DefaultPath = "dataApi"
 
 func SetPath(path string){
-	defaultPath = path
+	DefaultPath = path
 }
 
+// create database json
 func JSONdbCreate(path string, name string) error{
 	if path == ""{
-		path = defaultPath
+		path = DefaultPath
 	}
 
 	filePath := path+"/"+name+".json"
@@ -60,9 +59,41 @@ func JSONdbCreate(path string, name string) error{
 	return nil
 }
 
+// create last_id.json
+func JSONcreateLastID(path string) error{
+	if path == ""{
+		path = DefaultPath
+	}
+	path +="/lastid"
+
+	if err := os.MkdirAll(path,os.ModeDir|0755); err != nil{
+		fmt.Println(err)
+		return errors.New("Cannot create lastid directory!!!")
+	}
+
+	type Data struct{
+		Id int `json:"id"`;
+		Timestamp time.Time `json:"timestamp"`;
+	}
+
+	data := Data{Id:0,Timestamp:time.Now()}
+	jsonByte, err := json.Marshal(data)
+	if err != nil{
+		fmt.Println(err)
+		return errors.New("Cannot convert struct instance to JSON-encoded slice byte")
+	}
+
+	filePath := path+"/last_id.json"
+	if err := os.WriteFile(filePath,jsonByte,0644); err != nil{
+		fmt.Println(err)
+		return errors.New("Cannot create last_id.json file!!!")
+	}
+
+	return nil 
+}
 
 func LoadLastID() (int, error){
-	data, err := os.ReadFile(defaultPath)
+	data, err := os.ReadFile(DefaultPath)
 	if err != nil{
 		return 0, err
 	}
@@ -78,7 +109,7 @@ func LoadLastID() (int, error){
 func SaveLastID(id int) error{
 	id++
 	data := []byte(strconv.Itoa(id))
-	res := os.WriteFile(defaultPath, data, 0644)
+	res := os.WriteFile(DefaultPath, data, 0644)
 	return res
 }
 
