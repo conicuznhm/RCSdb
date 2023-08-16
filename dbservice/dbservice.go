@@ -12,23 +12,32 @@ import (
 
 // load and save id in txt
 // var defaultPath = "dataApi/utilstore/last_id.txt"
-var DefaultPath = "dataApi"
+var defaultPath = ""
+
+// set database dir
+var dirDB = "database"
 
 func SetPath(path string){
-	DefaultPath = path
+	defaultPath = path
 }
 
 // create database json
 func JSONdbCreate(path string, name string) error{
 	if path == ""{
-		path = DefaultPath
+		if defaultPath == ""{
+			path = dirDB
+		}else{
+			path = dirDB+"/"+defaultPath
+		}
+	}else{
+		path = dirDB+"/"+path
 	}
 
 	filePath := path+"/"+name+".json"
-	_, err := os.ReadFile(filePath)
-	
-	if err == nil{
-		return errors.New("The file name has already existed!")
+
+	// check whether a file has already existed or not
+	if _,err := os.Stat(filePath); !os.IsNotExist(err){
+		return errors.New(name+".json has already existed")
 	}
 	
 	// emptyMap := map[string]interface{}{}
@@ -42,7 +51,7 @@ func JSONdbCreate(path string, name string) error{
 	}
 
 	// create nested dir with mode permission d755
-	if err := os.MkdirAll(path,os.ModeDir|0755); err != nil{
+	if err := os.MkdirAll(path,0755); err != nil{
 		fmt.Println(err)
 		return errors.New("Cannot create directory!!!")
 	}
@@ -53,7 +62,12 @@ func JSONdbCreate(path string, name string) error{
 	}
 
 	// create last_id.json
-	if err := JSONcreateLastID(path); err != nil{
+	if err := JSONcreateLastID(path, name); err != nil{
+		return err
+	}
+
+	// create path dir and file
+	if err := CreatePath(path,name); err != nil{
 		return err
 	}
 
@@ -61,7 +75,7 @@ func JSONdbCreate(path string, name string) error{
 }
 
 func LoadLastID() (int, error){
-	data, err := os.ReadFile(DefaultPath)
+	data, err := os.ReadFile(defaultPath)
 	if err != nil{
 		return 0, err
 	}
@@ -77,7 +91,7 @@ func LoadLastID() (int, error){
 func SaveLastID(id int) error{
 	id++
 	data := []byte(strconv.Itoa(id))
-	res := os.WriteFile(DefaultPath, data, 0644)
+	res := os.WriteFile(defaultPath, data, 0644)
 	return res
 }
 
