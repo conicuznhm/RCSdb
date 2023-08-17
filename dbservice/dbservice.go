@@ -13,23 +13,28 @@ import (
 )
 
 // load and save id in txt
-// var defaultPath = "dataApi/utilstore/last_id.txt"
-var defaultPath = ""
+// var defaultDir = "dataApi/utilstore/last_id.txt"
+var defaultDir = ""
 
 // set database dir
 var dirDB = "database"
 
 func SetPath(path string){
-	defaultPath = path
+	defaultDir = path
 }
 
 // create database json
 func JSONdbCreate(path string, name string) error{
+
+	if name == ""{
+		return errors.New("The name of the database model is required")
+	}
+	
 	if path == ""{
-		if defaultPath == ""{
+		if defaultDir == ""{
 			path = dirDB
 		}else{
-			path = dirDB+"/"+defaultPath
+			path = dirDB+"/"+defaultDir
 		}
 	}else{
 		path = dirDB+"/"+path
@@ -77,7 +82,7 @@ func JSONdbCreate(path string, name string) error{
 }
 
 func LoadLastID() (int, error){
-	data, err := os.ReadFile(defaultPath)
+	data, err := os.ReadFile(defaultDir)
 	if err != nil{
 		return 0, err
 	}
@@ -93,7 +98,7 @@ func LoadLastID() (int, error){
 func SaveLastID(id int) error{
 	id++
 	data := []byte(strconv.Itoa(id))
-	res := os.WriteFile(defaultPath, data, 0644)
+	res := os.WriteFile(defaultDir, data, 0644)
 	return res
 }
 

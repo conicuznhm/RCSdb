@@ -11,7 +11,7 @@ import (
 // create last_id.json
 func JSONcreateLastID(path string, name string) error{
 	if path == ""{
-		path = defaultPath
+		path = defaultDir
 	}
 	path +="/lastid"
 
