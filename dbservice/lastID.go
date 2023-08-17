@@ -47,40 +47,46 @@ func JSONcreateLastID(path string, name string) error{
 	return nil
 }
 
-func CreatePath(path string,name string) error{
+// func CreatePath(path string,name string) error{
 	
-	filePath := dirDB+"/path/"+name+"path.txt"
+// 	filePath := dirDB+"/path/"+name+"path.txt"
 
-	if _, err := os.Stat(filePath); os.IsExist(err){
-		return errors.New(name+"path.txt has already existed")
-	}
+// 	if _, err := os.Stat(filePath); os.IsExist(err){
+// 		return errors.New(name+"path.txt has already existed")
+// 	}
 
-	if err := os.MkdirAll(dirDB+"/path",0755); err != nil{
-		fmt.Println(err)
-		return errors.New("Cannot create path directory!!!")
-	}
+// 	if err := os.MkdirAll(dirDB+"/path",0755); err != nil{
+// 		fmt.Println(err)
+// 		return errors.New("Cannot create path directory!!!")
+// 	}
 	
-	datapath := "data"+" "+path+"/"+name+".json"
-	lastid := "lastid"+" "+path+"/lastid/"+name+"_lastid.json"
+// 	datapath := "data"+" "+path+"/"+name+".json"
+// 	lastid := "lastid"+" "+path+"/lastid/"+name+"_lastid.json"
 
-	// file existing guard clause
-	if _,err := os.Stat(filePath); !os.IsNotExist(err){
-		return errors.New(name+"path.txt has already existed")
-	}
+// 	// file existing guard clause
+// 	if _,err := os.Stat(filePath); !os.IsNotExist(err){
+// 		return errors.New(name+"path.txt has already existed")
+// 	}
 
-	data := []string{datapath,lastid}
+// 	data := []string{datapath,lastid}
 
-	file, err := os.Create(filePath)
-	if err != nil {
-		return errors.New("Cannot create file")
-	}
-	defer file.Close()
+// 	file, err := os.Create(filePath)
+// 	if err != nil {
+// 		return errors.New("Cannot create file")
+// 	}
+// 	defer file.Close()
 
-	for _,line := range data{
-		_,err := file.WriteString(line+ "\n")
-		if err !=nil{
-			return err
-		}
-	}
-	return nil
-}
+// 	for _,line := range data{
+// 		_,err := file.WriteString(line+ "\n")
+// 		if err !=nil{
+// 			return err
+// 		}
+// 	}
+// 	return nil
+// }
+
+/////////////////////////////////////////////////////////////////
+//to invoke CreatePath
+// if err := CreatePath(path,name); err != nil{
+// 	return err
+// }

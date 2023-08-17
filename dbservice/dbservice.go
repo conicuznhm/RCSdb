@@ -7,7 +7,9 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
+
+	"github.com/conicuznhm/rcsdb/dbservice/servicefn"
+	// "time"
 )
 
 // load and save id in txt
@@ -66,8 +68,8 @@ func JSONdbCreate(path string, name string) error{
 		return err
 	}
 
-	// create path dir and file
-	if err := CreatePath(path,name); err != nil{
+	// create path dir and file by using CreatePath from servicefn module
+	if err := servicefn.CreatePath(path,dirDB,name); err != nil{
 		return err
 	}
 
@@ -96,39 +98,39 @@ func SaveLastID(id int) error{
 }
 
 // load and save id in json
-var jsonPath = "dataApi/utilstore/last_id.json"
+// var jsonPath = "dataApi/utilstore/last_id.json"
 
-type LastData struct{
-	Id int
-	Timestamp time.Time
-}
+// type LastData struct{
+// 	Id int
+// 	Timestamp time.Time
+// }
 
-func JSONLoadID() (*LastData, error){
-	var lastData LastData
-	data, err := os.ReadFile(jsonPath)
-	if err != nil{
-		return nil, err
-	}
-	if err = json.Unmarshal(data, &lastData); err!=nil{
-		return nil, err
-	}
-	return &lastData, nil
-}
+// func JSONLoadID() (*LastData, error){
+// 	var lastData LastData
+// 	data, err := os.ReadFile(jsonPath)
+// 	if err != nil{
+// 		return nil, err
+// 	}
+// 	if err = json.Unmarshal(data, &lastData); err!=nil{
+// 		return nil, err
+// 	}
+// 	return &lastData, nil
+// }
 
-func JSONSaveID(lastData *LastData) error{
-	lastData.Id++
-	lastData.Timestamp = time.Now()
+// func JSONSaveID(lastData *LastData) error{
+// 	lastData.Id++
+// 	lastData.Timestamp = time.Now()
 
-	data, err :=json.Marshal(lastData)
-	if err != nil{
-		return err
-	}
+// 	data, err :=json.Marshal(lastData)
+// 	if err != nil{
+// 		return err
+// 	}
 	
-	if err:=os.WriteFile(jsonPath, data, 0644); err != nil{
-		return err
-	}
-	return nil
-}
+// 	if err:=os.WriteFile(jsonPath, data, 0644); err != nil{
+// 		return err
+// 	}
+// 	return nil
+// }
 
 // func main(){
 // 	err := JSONdbCreate("dataApi/source","user")

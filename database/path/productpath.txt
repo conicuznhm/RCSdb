@@ -1,2 +1,0 @@
-data database/product.json
-lastid database/lastid/product_lastid.json

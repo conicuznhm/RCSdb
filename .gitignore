@@ -19,3 +19,6 @@ go.work
 
 # main file for develop only
 main.go
+
+# database is trial file only
+database/
