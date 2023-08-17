@@ -13,19 +13,19 @@ type LastData struct{
 }
 
 // save last id to path
-func JSONSaveID(lastid_path string, lastData *LastData) error{
+func JSONSaveID(lastid_path string, lastData *LastData) (*LastData, error){
 	lastData.Id++
 	lastData.Timestamp = time.Now()
 
 	data, err :=json.Marshal(lastData)
 	if err != nil{
-		return err
+		return &LastData{}, err
 	}
 	
 	if err:=os.WriteFile(lastid_path, data, 0644); err != nil{
-		return err
+		return &LastData{}, err
 	}
-	return nil
+	return lastData, nil
 }
 
 // load last id from path version 1
